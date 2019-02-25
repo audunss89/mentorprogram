@@ -9,6 +9,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import pages.SavingsRequestPage;
 
 public class SavingsCalculatorTest {
     private WebDriver driver;
@@ -22,53 +23,41 @@ public class SavingsCalculatorTest {
 
     @Test
     public void itShouldDisplayTitle(){
-    String expectedTitle = "Savings Calculator";
-    String actualTitle = driver.findElement(By.cssSelector("h1")).getText();
+        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
+        String expectedTitle = "Savings Calculator";
+        String actualTitle = savingsRequestPage.getTitle();
 
-    Assert.assertEquals(expectedTitle,actualTitle);
+        Assert.assertEquals(expectedTitle,actualTitle);
 
     }
 
     @Test
     public void itShouldCalculateTotalIncome(){
-        selectFund("Hoggwart's Fund");
-        inputInvestment("5000");
+        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
 
-        driver.findElement(By.id("yearsInput")).sendKeys(Keys.TAB);
-        driver.findElement(By.xpath("//div[contains(@class, 'result')]/div[1]/p")).getText();
+        savingsRequestPage.selectFund("Hoggwart's Fund");
+        savingsRequestPage.inputInvestment("5000");
+        savingsRequestPage.inputYears("10");
+
 
         String incomeText = "kr";
-        String actualIncomeText = driver.findElement(By.xpath("//div[contains(@class, 'result')]/div[1]/p")).getText();
+        String actualIncomeText = savingsRequestPage.getTotalIncome();
         Assert.assertFalse(actualIncomeText.equals(("")));
         Assert.assertTrue(actualIncomeText.contains((incomeText)));
     }
 
-
-    private void selectFund(String fundName) {
-        new Select(driver.findElement(By.id("fundSelect"))).selectByVisibleText(fundName);
-    }
-
     @Test
     public void itShouldCalculateNetIncome(){
-        selectFund("Death Star real estate");
-        inputInvestment("5000");
-        inputYears("10");
+        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
+        savingsRequestPage.selectFund("Death Star real estate");
+        savingsRequestPage.inputInvestment("5000");
+        savingsRequestPage.inputYears("10");
 
 
         String a = "kr";
-        String actualInterstIncome = driver.findElement(By.xpath("//div[contains(@class, 'result')]/div[2]/p")).getText();
-        Assert.assertFalse(actualInterstIncome.equals(("")));
-        Assert.assertTrue(actualInterstIncome.contains((a)));
-    }
-
-    private void inputYears(String years) {
-        driver.findElement(By.id("yearsInput")).sendKeys(years);
-        driver.findElement(By.id("yearsInput")).sendKeys(Keys.TAB);
-    }
-
-    private void inputInvestment(String oneTimeInvestment) {
-        driver.findElement((By.id("oneTimeInvestmentInput"))).sendKeys(oneTimeInvestment);
-        driver.findElement(By.id("oneTimeInvestmentInput")).sendKeys(Keys.TAB);
+        String actualInterestIncome = savingsRequestPage.getInterestIncome();
+        Assert.assertFalse(actualInterestIncome.equals(("")));
+        Assert.assertTrue(actualInterestIncome.contains((a)));
     }
 
     @After
