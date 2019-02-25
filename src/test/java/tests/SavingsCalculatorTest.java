@@ -1,14 +1,14 @@
 package tests;
 
+import models.SavingRequest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 import pages.SavingsRequestPage;
 
 public class SavingsCalculatorTest {
@@ -58,6 +58,61 @@ public class SavingsCalculatorTest {
         String actualInterestIncome = savingsRequestPage.getInterestIncome();
         Assert.assertFalse(actualInterestIncome.equals(("")));
         Assert.assertTrue(actualInterestIncome.contains((a)));
+    }
+
+    @Test
+    public void itShouldEnableaddSavingsButton(){
+        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
+        savingsRequestPage.selectFund("Death Star real estate");
+        savingsRequestPage.inputInvestment("5000");
+        savingsRequestPage.inputYears("10");
+        savingsRequestPage.inputEmail("audunss89@gmail.com");
+
+        Assert.assertTrue(savingsRequestPage.getApplyForSavingsButton().isEnabled());
+
+
+    }
+
+    @Test
+    public void itShouldAddNewSavingsRequestToTheRecentRequestList(){
+        SavingRequest request = new SavingRequest(
+                "Batman's Cave Development",
+                "25000",
+                25,
+                "audunss89@gmail.com"
+        );
+        //arrange
+        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
+        int initialNumberOfRequest = savingsRequestPage.getRecentRequestList().size();
+        savingsRequestPage.enterNewSavingRequestData(request);
+        //act
+        savingsRequestPage.getApplyForSavingsButton().click();
+        //assert
+        int currentNumberOfRequests = savingsRequestPage.getRecentRequestList().size();
+        Assert.assertEquals(initialNumberOfRequest+1,currentNumberOfRequests);
+
+    }
+
+    @Test
+    public void itShouldStoreCorrectResultDataInNewSavingRequest(){
+        SavingRequest request = new SavingRequest(
+                "Batman's Cave Development",
+                "25000",
+                25,
+                "audunss89@gmail.com"
+        );
+        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
+        savingsRequestPage.enterNewSavingRequestData(request);
+
+        request.getSavingResult().setTotalIncome(savingsRequestPage.getTotalIncome());
+        request.getSavingResult().setRisk(savingsRequestPage.getRiskLevel());
+
+        savingsRequestPage.getApplyForSavingsButton().click();
+
+
+        savingsRequestPage.checkMostRecentSavingRequestData(request);
+
+
     }
 
     @After
