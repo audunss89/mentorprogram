@@ -1,5 +1,6 @@
 package tests;
 
+import context.TestBase;
 import models.SavingRequest;
 import org.junit.After;
 import org.junit.Assert;
@@ -11,19 +12,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.SavingsRequestPage;
 
-public class SavingsCalculatorTest {
-    private WebDriver driver;
-
+public class SavingsCalculatorTest extends TestBase {
+    private SavingsRequestPage savingsRequestPage;
     @Before
-    public void setUp(){
-        System.setProperty("webdriver.chrome.driver","chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.get("http://localhost:81/savingscalculator.php");
+    public void openPage() {
+        savingsRequestPage = new SavingsRequestPage(driver);
+        savingsRequestPage.openPage();
     }
 
     @Test
     public void itShouldDisplayTitle(){
-        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
+
         String expectedTitle = "Savings Calculator";
         String actualTitle = savingsRequestPage.getTitle();
 
@@ -33,8 +32,6 @@ public class SavingsCalculatorTest {
 
     @Test
     public void itShouldCalculateTotalIncome(){
-        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
-
         savingsRequestPage.selectFund("Hoggwart's Fund");
         savingsRequestPage.inputInvestment("5000");
         savingsRequestPage.inputYears("10");
@@ -48,7 +45,6 @@ public class SavingsCalculatorTest {
 
     @Test
     public void itShouldCalculateNetIncome(){
-        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
         savingsRequestPage.selectFund("Death Star real estate");
         savingsRequestPage.inputInvestment("5000");
         savingsRequestPage.inputYears("10");
@@ -57,12 +53,12 @@ public class SavingsCalculatorTest {
         String a = "kr";
         String actualInterestIncome = savingsRequestPage.getInterestIncome();
         Assert.assertFalse(actualInterestIncome.equals(("")));
-        Assert.assertTrue(actualInterestIncome.contains((a)));
+        Assert.assertTrue("Total income should contain currency",
+                actualInterestIncome.contains((a)));
     }
 
     @Test
     public void itShouldEnableaddSavingsButton(){
-        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
         savingsRequestPage.selectFund("Death Star real estate");
         savingsRequestPage.inputInvestment("5000");
         savingsRequestPage.inputYears("10");
@@ -82,7 +78,6 @@ public class SavingsCalculatorTest {
                 "audunss89@gmail.com"
         );
         //arrange
-        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
         int initialNumberOfRequest = savingsRequestPage.getRecentRequestList().size();
         savingsRequestPage.enterNewSavingRequestData(request);
         //act
@@ -101,7 +96,6 @@ public class SavingsCalculatorTest {
                 25,
                 "audunss89@gmail.com"
         );
-        SavingsRequestPage savingsRequestPage = new SavingsRequestPage(driver);
         savingsRequestPage.enterNewSavingRequestData(request);
 
         request.getSavingResult().setTotalIncome(savingsRequestPage.getTotalIncome());
@@ -115,9 +109,5 @@ public class SavingsCalculatorTest {
 
     }
 
-    @After
-    public void tearDown(){
-        driver.close();
-        driver.quit();
-    }
+
 }

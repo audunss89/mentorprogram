@@ -35,4 +35,6 @@ public class SavingRequest {
         this.email = email;
         this.savingResult = new SavingResult();
     }
+
+
 }

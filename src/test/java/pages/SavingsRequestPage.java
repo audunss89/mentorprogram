@@ -118,4 +118,8 @@ public class SavingsRequestPage {
 
         Assert.assertTrue(actualRequestAmountText.contains(request.getSavingResult().getTotalIncome()));
     }
+
+    public void openPage(){
+        driver.get("http://localhost:81/savingscalculator.php");
+    }
 }
