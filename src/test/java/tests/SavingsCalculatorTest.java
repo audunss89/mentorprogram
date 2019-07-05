@@ -14,6 +14,7 @@ import pages.SavingsRequestPage;
 
 public class SavingsCalculatorTest extends TestBase {
     private SavingsRequestPage savingsRequestPage;
+
     @Before
     public void openPage() {
         savingsRequestPage = new SavingsRequestPage(driver);
@@ -21,17 +22,17 @@ public class SavingsCalculatorTest extends TestBase {
     }
 
     @Test
-    public void itShouldDisplayTitle(){
+    public void itShouldDisplayTitle() {
 
         String expectedTitle = "Savings Calculator";
         String actualTitle = savingsRequestPage.getTitle();
 
-        Assert.assertEquals(expectedTitle,actualTitle);
+        Assert.assertEquals(expectedTitle, actualTitle);
 
     }
 
     @Test
-    public void itShouldCalculateTotalIncome(){
+    public void itShouldCalculateTotalIncome() {
         savingsRequestPage.selectFund("Hoggwart's Fund");
         savingsRequestPage.inputInvestment("5000");
         savingsRequestPage.inputYears("10");
@@ -44,7 +45,7 @@ public class SavingsCalculatorTest extends TestBase {
     }
 
     @Test
-    public void itShouldCalculateNetIncome(){
+    public void itShouldCalculateNetIncome() {
         savingsRequestPage.selectFund("Death Star real estate");
         savingsRequestPage.inputInvestment("5000");
         savingsRequestPage.inputYears("10");
@@ -58,7 +59,7 @@ public class SavingsCalculatorTest extends TestBase {
     }
 
     @Test
-    public void itShouldEnableaddSavingsButton(){
+    public void itShouldEnableaddSavingsButton() {
         savingsRequestPage.selectFund("Death Star real estate");
         savingsRequestPage.inputInvestment("5000");
         savingsRequestPage.inputYears("10");
@@ -70,7 +71,7 @@ public class SavingsCalculatorTest extends TestBase {
     }
 
     @Test
-    public void itShouldAddNewSavingsRequestToTheRecentRequestList(){
+    public void itShouldAddNewSavingsRequestToTheRecentRequestList() {
         SavingRequest request = new SavingRequest(
                 "Batman's Cave Development",
                 "25000",
@@ -84,12 +85,12 @@ public class SavingsCalculatorTest extends TestBase {
         savingsRequestPage.getApplyForSavingsButton().click();
         //assert
         int currentNumberOfRequests = savingsRequestPage.getRecentRequestList().size();
-        Assert.assertEquals(initialNumberOfRequest+1,currentNumberOfRequests);
+        Assert.assertEquals(initialNumberOfRequest + 1, currentNumberOfRequests);
 
     }
 
     @Test
-    public void itShouldStoreCorrectResultDataInNewSavingRequest(){
+    public void itShouldStoreCorrectResultDataInNewSavingRequest() {
         SavingRequest request = new SavingRequest(
                 "Batman's Cave Development",
                 "25000",

@@ -1,8 +1,13 @@
 package models;
 
 import enumerators.RiskLevel;
+import utils.FormatterHelper;
 
 public class SavingResult {
+    private String totalIncome;
+    private String interestIncome;
+    private RiskLevel risk;
+
     public String getTotalIncome() {
         return totalIncome;
     }
@@ -27,8 +32,9 @@ public class SavingResult {
         this.risk = risk;
     }
 
-    private String totalIncome;
-    private String interestIncome;
-    private RiskLevel risk;
+    public Double getTotalIncomeAsDouble() {
+        return FormatterHelper.amountToDouble(totalIncome);
+    }
+
 
 }
